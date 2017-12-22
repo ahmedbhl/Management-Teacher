@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<security:http auto-config="true"> 
+		<security:intercept-url pattern="/admin" access="ROLE_ADMIN"/>
+		<security:intercept-url pattern="/admin/" access="ROLE_ADMIN"/>
+		<security:intercept-url pattern="/admin/**" access="ROLE_ADMIN"/>
+		<security:intercept-url pattern="/user/" access="ROLE_USER"/>
+		<security:intercept-url pattern="/user/**" access="ROLE_USER"/>
+		<security:intercept-url pattern="/enseignants/" access="ROLE_ADMIN,ROLE_USER"/>
+		<security:intercept-url pattern="/enseignants/**" access="ROLE_ADMIN"/>
+		<security:intercept-url pattern="/chargeEnseignants/" access="ROLE_ADMIN"/>
+		<security:intercept-url pattern="/chargeEnseignants/**" access="ROLE_ADMIN"/>
+		<security:intercept-url pattern="/grades/" access="ROLE_ADMIN"/>
+		<security:intercept-url pattern="/grades/**" access="ROLE_ADMIN"/>
+		<security:intercept-url pattern="/seances/" access="ROLE_ADMIN"/>
+		<security:intercept-url pattern="/seances/**" access="ROLE_ADMIN"/>
+		<security:intercept-url pattern="/semestres/" access="ROLE_ADMIN"/>
+		<security:intercept-url pattern="/semestres/**" access="ROLE_ADMIN"/>
+		<security:intercept-url pattern="/utilisateurs/" access="ROLE_ADMIN"/>
+		<security:intercept-url pattern="/utilisateurs/**" access="ROLE_ADMIN"/>
+		<security:intercept-url pattern="/propos/" access="ROLE_ADMIN,ROLE_USER"/>
+		<security:intercept-url pattern="/propos/**" access="ROLE_ADMIN,ROLE_USER"/>
+		<security:intercept-url pattern="/home/" access="ROLE_ADMIN,ROLE_USER"/>
+		<security:intercept-url pattern="/home/**" access="ROLE_ADMIN,ROLE_USER"/>
+		
+		
+		
+		
+		<security:form-login login-page="/"   authentication-success-handler-ref="customSuccessHandler" authentication-failure-url="/failedlogin" />
+		<!-- default-target-url="/home/"-->
+		<security:access-denied-handler error-page="/Access_Denied/401/"/>
+		
+		<security:logout logout-success-url="/" delete-cookies="JSESSIONID"/>
+	</security:http>
+
+	<security:authentication-manager>
+		<security:authentication-provider>
+			<security:password-encoder hash="md5"  /> 
+			<security:jdbc-user-service data-source-ref="dataSource" users-by-username-query="select mail ,password,Actived from utilisateur where mail =?"
+			authorities-by-username-query="select u.mail ,r.roleName from utilisateur u,roleuser r where u.idutilisateur=r.idutilisateur and u.mail =?"/>
+		</security:authentication-provider> 
+	
+	</security:authentication-manager>
+
+    <bean id="customSuccessHandler" class="com.app.mvc.spring.security.configuration.CustomSuccessHandler" />
+
+
+</beans>

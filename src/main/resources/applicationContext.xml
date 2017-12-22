@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+		<property name="url"
+		value="jdbc:mysql://localhost:3306/gestionenseignant?createDatabaseIfNotExist=true"></property>
+		<property name="username" value="root"></property>
+		<property name="password" value=""></property>
+	</bean>
+	
+		<bean id="persistenceUnitManager"
+		class="org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager">
+		<property name="persistenceXmlLocations">
+			<list>
+				<value>classpath*:META-INF/persistence.xml</value>
+			</list>
+		</property>
+		<property name="defaultDataSource" ref="dataSource"></property>
+	</bean>
+	
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="persistenceUnitManager" ref="persistenceUnitManager"></property>
+		<property name="persistenceUnitName" value="GestionEnseignant"></property>
+	</bean>
+	
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory"></property>
+	</bean>
+ 	<tx:annotation-driven transaction-manager="transactionManager"/>
+	<context:annotation-config></context:annotation-config>
+	
+	
+	<bean id="CruptPassword" class="com.app.mvc.utils.CryptPassword"></bean>
+	<bean id="sendPassword" class="com.app.mvc.utils.SendMailTLS"></bean>
+	<bean id="csvloader" class="com.app.mvc.utils.CSVLoader">
+		<property name="cryptMD5" ref="CruptPassword"></property>
+	</bean>
+	
+	<bean id="EnseignantDAO" class="com.app.mvc.dao.imp.EnseignantDaoImp">
+	<property name="cryptMD5" ref="CruptPassword"></property>
+	</bean>
+	<bean id="EnsiegnantService" class="com.app.mvc.service.imp.ServiceEnseignantImp">
+	<property name="dao" ref="EnseignantDAO" ></property>	
+	</bean>
+	
+	<bean id="ChargeEnseignantDAO" class="com.app.mvc.dao.imp.ChargeEnseignantDaoImp"></bean>
+	<bean id="ChargeEnsiegnantService" class="com.app.mvc.service.imp.serviceChargeEnseignantImp">
+	<property name="dao" ref="ChargeEnseignantDAO" ></property>	
+	</bean>
+	
+	
+	<bean id="SeanceDAO" class="com.app.mvc.dao.imp.SeanceDaoImp"></bean>
+	<bean id="SeanceService" class="com.app.mvc.service.imp.ServiceSeanceImp">
+	<property name="dao" ref="SeanceDAO" ></property>	
+	</bean>
+	<bean id="UserDAO" class="com.app.mvc.dao.imp.UserDaoImp"> </bean>
+	<bean id="UserService" class="com.app.mvc.service.imp.ServiceUserImp">
+	<property name="dao" ref="UserDAO"></property>
+	</bean>
+	
+	<bean id="SemestreDao" class="com.app.mvc.dao.imp.SemestreDaoImpl"></bean>
+	<bean id="semestreService" class="com.app.mvc.service.imp.SeviceSemestreImp">
+	<property name="dao" ref="SemestreDao"></property>
+	</bean>
+	
+	<bean id="GradeDao" class="com.app.mvc.dao.imp.GradeDaoImp"></bean>
+	<bean id="GradeService" class="com.app.mvc.service.imp.ServiceGradeImp">
+	<property name="dao" ref="GradeDao"></property>
+	</bean>
+	
+	<bean id="roleuserdao" class="com.app.mvc.dao.imp.RoleUserDAOIpm"></bean>
+	<bean id="RoleuserService" class="com.app.mvc.service.imp.ServiceRoleUserImpl">
+	<property name="dao" ref="roleuserdao"></property>
+	</bean>
+	
+	
+	<import resource="classpath:config/security-config.xml" />
+	
+<!-- 	 <bean id="messageSource"  class="org.springframework.context.support.ResourceBundleMessageSource"> -->
+<!--         <property name="basenames" > -->
+<!--         value="WEB-INF/messages/message_fr.properties" /> -->
+<!--          <property name="defaultEncoding" value="UTF-8" />   -->
+<!--       <list> -->
+<!--                  <value>message_fr</value> -->
+<!--            </list>        </property> -->
+<!--  	</bean> -->
+	<!-- Declaration des beans -->
+	<!--<import resource="classpath:config/beans-config.xml" />-->
+
+
+</beans>

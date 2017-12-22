@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<bean id="EnseignantDAO" class="com.app.mvc.dao.imp.EnseignantDaoImp"></bean>
+	<bean id="EnsiegnantService" class="com.app.mvc.service.imp.ServiceEnseignantImp">
+	<property name="dao" ref="EnseignantDAO" ></property>	
+	</bean>
+	
+	<bean id="ChargeEnseignantDAO" class="com.app.mvc.dao.imp.ChargeEnseignantDaoImp"></bean>
+	<bean id="ChargeEnsiegnantService" class="com.app.mvc.service.imp.serviceChargeEnseignantImp">
+	<property name="dao" ref="ChargeEnseignantDAO" ></property>	
+	</bean>
+	
+	
+	<bean id="SeanceDAO" class="com.app.mvc.dao.imp.SeanceDaoImp"></bean>
+	<bean id="SeanceService" class="com.app.mvc.service.imp.ServiceSeanceImp">
+	<property name="dao" ref="SeanceDAO" ></property>	
+	</bean>
+	<bean id="UserDAO" class="com.app.mvc.dao.imp.UserDaoImp"> </bean>
+	<bean id="UserService" class="com.app.mvc.service.imp.ServiceUserImp">
+	<property name="dao" ref="UserDAO"></property>
+	</bean>
+	
+	<bean id="SemestreDao" class="com.app.mvc.dao.imp.SemestreDaoImpl"></bean>
+	<bean id="semestreService" class="com.app.mvc.service.imp.SeviceSemestreImp">
+	<property name="dao" ref="SemestreDao"></property>
+	</bean>
+	
+	<bean id="GradeDao" class="com.app.mvc.dao.imp.GradeDaoImp"></bean>
+	<bean id="GradeService" class="com.app.mvc.service.imp.ServiceGradeImp">
+	<property name="dao" ref="GradeDao"></property>
+	</bean>
+	
+
+</beans>
